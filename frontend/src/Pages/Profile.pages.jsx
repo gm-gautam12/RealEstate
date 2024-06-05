@@ -59,7 +59,10 @@ const Profile = () => {
                 [e.target.id]: e.target.value
             }
         )
+
     }
+
+
 
     const handleSumbit = async(e) => {
         e.preventDefault();
@@ -83,9 +86,12 @@ const Profile = () => {
                 return;
             }
 
-            dispatch(updateUserSuccess(data));
-            
+            dispatch(updateUserSuccess(data.data));
+            // setUpdateSuccess(true);
+            console.log(data,"====== formData ======");
+            setFormData(data.data);
 
+        
 
         } catch (error) {
             dispatch(updateUserFailure(error.message));

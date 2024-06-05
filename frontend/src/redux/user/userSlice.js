@@ -25,10 +25,11 @@ const userSlice = createSlice({
         updateUserStart: (state) => {
             state.loading = true;
         },
-        updateUserSuccess: (state,payload) => {
-            state.currentUser = payload;
+        updateUserSuccess: (state,data) => {
+            state.currentUser = data.payload;
             state.loading = false;
             state.error = null;
+            console.log(data, "====payload=====")
         },
         updateUserFailure: (state,payload) => {
             state.error = payload;

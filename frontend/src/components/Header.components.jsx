@@ -7,6 +7,7 @@ import  { useSelector }  from 'react-redux';
 const Header = () => {
 
     const { currentUser } = useSelector((state) => state.user);
+    console.log(currentUser, "=========currentUser======");
 
     return(
         <header className="bg-slate-200 shadow-md">
