@@ -75,4 +75,25 @@ const updateUser = asyncHandler(async(req,res,next) => {
 //       }
 // };
 
-export {user,updateUser};
+const deleteUser = asyncHandler(async(req,res,next)=>{
+
+    if(req.user.id !== req.params.id)
+        return next(new ApiError(401,"you can only delete your own account"));
+
+    try {
+
+        const user = await User.findByIdAndDelete(req.params.id);
+
+        if(!user)
+            throw new ApiError(500,"something went wrong while deleting user");
+
+        return res.clearCookie("accessToken").status(200).json(
+            new ApiResponse(200,{},"user deleted successfully")
+        );
+        
+    } catch (error) {
+        return next(new ApiError(500,"something went wrong while deleting user"));
+    }
+})
+
+export {user,updateUser,deleteUser};

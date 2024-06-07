@@ -1,5 +1,4 @@
-import jwt from 'jsonwebtoken';
-import { ErrorHandler } from './ErrorHandler.js'; 
+import jwt from 'jsonwebtoken'; 
 import { ApiError } from './ApiError.js';
 
 
@@ -12,7 +11,7 @@ export const verifyToken = (req,res,next) => {
 
     jwt.verify(token,process.env.JWT_SECRET,(err,user)=>{
         if(err)
-            return next(ErrorHandler(403,"frobidden access"));
+            return next(new ApiError(403,"frobidden access"));
 
         req.user = user;
         next();

@@ -11,6 +11,7 @@ const SignIn = () => {
     //  const [error,setError] = useState(null);
     //  const [loading,setLoading] = useState(false);
     const { loading, error } = useSelector((state) => state.user);
+    console.log(error,"====error 1st====")
 
     const navigate = useNavigate();
 
@@ -66,7 +67,7 @@ const SignIn = () => {
 
 
 
-
+    console.log(error,"====error 2nd====");
     return(
         <div className="p-3 max-w-lg mx-auto">
         <h1 className="text-3xl text-center font-semibold my-7">Sign In</h1>
