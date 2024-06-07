@@ -148,7 +148,15 @@ const googleOAuth = async (req, res, next) => {
     }
   };
   
+
+  const signOut = asyncHandler(async(req,res) => {
+
+    res.clearCookie("accessToken").json(
+      new ApiResponse(200,{},"user signed out successfully")
+    );
+
+  })
     
 
 
-export {signup,signin,googleOAuth};
+export { signup,signin,googleOAuth,signOut };
