@@ -1,3 +1,4 @@
+import { Listing } from "../models/listing.model.js";
 import User from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
@@ -96,4 +97,26 @@ const deleteUser = asyncHandler(async(req,res,next)=>{
     }
 })
 
-export {user,updateUser,deleteUser};
+const getUserListings = asyncHandler(async(req,res,next) => {
+
+        if(req.user.id === req.params.id){
+            
+            try {
+
+                const listing = Listing.find({userRef:req.params.id});
+                res.status(200).json(
+                    new ApiResponse(200,listing,"user listings fetched successfully")
+                )
+                
+            } catch (error) {
+                return next(new ApiError(500,error))
+            }
+
+        }
+        else{
+           return next(new ApiError(401,"you are not allowed to fetch this user listings"));
+        }
+        
+})
+
+export {user,updateUser,deleteUser,getUserListings};
