@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 
 
+
 const CreateListing = () => {
 
     const { currentUser } = useSelector((state) => state.user);
@@ -15,7 +16,7 @@ const CreateListing = () => {
     const [files,setFiles] = useState([]);
    
     const [formData,setFormData] = useState({
-        imageUrls: [],
+        imageUrl: [],
         name: "",
         description: "",
         address: "",
@@ -39,24 +40,28 @@ const CreateListing = () => {
 
       console.log(formData,"===formData===");
 
+
     const handleImageSubmit = (e) => {
         
-        if(files.length>0 && files.length + formData.imageUrls.length <7){
+        if(files.length>0 && files.length + formData.imageUrl.length < 7){
             setuploading(true);
+            setImageUploadError(false);
             const promises = [];
 
             for(let i=0;i<files.length;i++){
+                console.log(files[i]);
                 promises.push(storeImage(files[i]));
             }
 
             Promise.all(promises).then((urls) => {
-                setFormData({...formData,imageUrls:formData.imageUrls.concat(urls)})
+                setFormData({...formData,imageUrl:formData.imageUrl.concat(urls)}),
                 setImageUploadError(false);
                 setuploading(false);
             }).catch((error) => {
                 setImageUploadError("Image upload failed");
                  setuploading(false);
             })
+
 
         }else{
             setImageUploadError("You can only upload 6 images per listing");
@@ -88,10 +93,12 @@ const CreateListing = () => {
         });
     }
 
+   
+
     const handleRemoveImage = (index) => {
         setFormData({
             ...formData,
-            imageUrls: formData.imageUrls.filter((_,i) => i !== index)
+            imageUrl: formData.imageUrl.filter((_,i) => i !== index)
         })
     }
 
@@ -121,13 +128,13 @@ const CreateListing = () => {
     }
 
 
-    const handleSubmit = async(e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            if(formData.imageUrls.length < 1){
+            if(formData.imageUrl.length < 1){
                return setError("upload atleast one image for listing");
             }
-            if(formData.regularPrice < formData.discountPrice){
+            if(+formData.regularPrice < +formData.discountPrice){
                  return setError("Discount price should be less than regular price");
             }
             setLoading(true);
@@ -142,8 +149,8 @@ const CreateListing = () => {
                 body: JSON.stringify({
                     ...formData,
                     userRef: currentUser._id,
-                })
-            })
+                }),
+            });
 
             const data = await res.json();
             setLoading(false);
@@ -253,7 +260,7 @@ const CreateListing = () => {
                     </div>
                     <p className="text-red-700 text-sm">{imageUploadError && imageUploadError}</p>
                     {
-                        formData.imageUrls.length>0 && formData.imageUrls.map((url,index) => (
+                        formData.imageUrl.length>0 && formData.imageUrl.map((url,index) => (
                             <div key={url} className="flex justify-between p-3 border items-center">
                                 <img src={url} alt="listing image" className="h-20 w-20 object-contain rounded-lg"/>
                                 <button onClick={() => {handleRemoveImage(index)}} type="button" className="p-3 text-red-700 rounded-lg uppercase hover:opacity-75">Delete</button>

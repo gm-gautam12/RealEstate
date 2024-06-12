@@ -103,9 +103,11 @@ const getUserListings = asyncHandler(async(req,res,next) => {
             
             try {
 
-                const listing = Listing.find({userRef:req.params.id});
+                const listing = await Listing.find({userRef:req.params.id});
+
                 res.status(200).json(
-                    new ApiResponse(200,listing,"user listings fetched successfully")
+                     new ApiResponse(200,listing,"user listings fetched successfully")
+                   // listing
                 )
                 
             } catch (error) {
