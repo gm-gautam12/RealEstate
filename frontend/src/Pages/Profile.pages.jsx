@@ -7,6 +7,7 @@ import { updateUserStart,updateUserSuccess,updateUserFailure,
 signOutUserFailure,signOutUserStart,signOutUserSuccess } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { ApiError } from "../../../backend/utils/ApiError";
 
 
 
@@ -22,6 +23,7 @@ const Profile = () => {
     const [updateSuccess,setUpdateSuccess] = useState(false);
     const [showImageListingError,setShowImageListingError] = useState(false);
     const [userListings,setUserListings] = useState([]);
+    //const [listingDeleteError,setListingDeleteError] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -168,6 +170,25 @@ const Profile = () => {
 
     }
 
+    const handleListingDelete = async(listingId) => {
+        try {
+           const res = await fetch(`/api/listing/delete/${listingId}`,
+            {
+                 method:"DELETE",
+            }  
+           ) 
+           const data = await res.json();
+           if(data.success === false){
+                throw new ApiError(400,data.message);
+           }
+
+           setUserListings((prev) => prev.filter((listing) => listing._id !== listingId));
+
+        } catch (error) {
+            throw new ApiError(500,error);
+        }
+    }
+
     return(
         <div className="p-3 max-w-lg mx-auto">
             <h1 className="text-3xl font-semibold text-center my-7">Profile</h1> 
@@ -217,7 +238,7 @@ const Profile = () => {
                         </Link>
 
                         <div className="flex flex-col items-center">
-                            <button className="text-red-700 uppercase">Delete</button>
+                            <button onClick={() => handleListingDelete(listing._id)} className="text-red-700 uppercase">Delete</button>
                             <button className="text-green-700 uppercase">Edit</button>
                         </div>
                     </div>
