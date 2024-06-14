@@ -74,43 +74,6 @@ const signin = asyncHandler(async(req,res)=> {
      )
 })  
 
-// const googleOAuth = asyncHandler(async(req,res,next)=>{
-
-//     try {
-//         const user = await User.findOne({ email:req.body.email });
-//         if(user){
-//             const token = jwt.sign({id:user._id},process.env.JWT_SECRET);
-//             const exisitedUser = await User.findById(user._id).select("-password");
-
-
-
-//         return res.cookie("accessToken",token,{httpOnly:true}).status(200).json(
-//             new ApiResponse(200,exisitedUser,"User logged in successfully")
-//         )
-//         }
-//         else{
-//           const generatedPasword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8); // 16 characters password
-//           const hashPassword = bcrypt.hashSync(generatedPasword,10);
-
-//           const newUser = await User.create({
-//                 username:req.body.name.split(" ").join("").toLowerCase() + Math.random().toString(36).slice(-4),
-//                 email:req.body.email,
-//                 password:hashPassword,
-//                 avatar: req.body.photo,
-//           })
-//           await newUser.save();
-
-//           const newToken = jwt.sign({id:newUser._id},process.env.JWT_SECRET);
-//           const newCreatedUser = await User.findById(newUser._id).select("-password");
-         
-//           res.cookie("accessToken",newToken,{httpOnly:true}).status(200).json(
-//             new ApiResponse(200,newCreatedUser,"User registered and logged in successfully")
-//           )
-//         }
-//     } catch (error) {
-//        next(error);
-//     }
-// })
 
 const googleOAuth = async (req, res, next) => {
     try {
