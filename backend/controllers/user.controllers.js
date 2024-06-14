@@ -93,4 +93,22 @@ const getUserListings = asyncHandler(async(req,res,next) => {
         
 })
 
-export {user,updateUser,deleteUser,getUserListings};
+const getUser = asyncHandler(async(req,res) => {
+
+    try {
+        const user = await User.findById(req.params.id);
+        if(!user)
+            throw new ApiError(404,"user not found");
+
+        const updatedUser = await User.findById(user._id).select("-password");
+        
+        res.status(200).json(
+            new ApiResponse(200,updatedUser,"user fetched successfully")
+        )
+
+    } catch (error) {
+        throw new ApiError(500,error);
+    }
+})
+
+export { user,updateUser,deleteUser,getUserListings,getUser };
