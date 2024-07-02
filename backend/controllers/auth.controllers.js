@@ -15,14 +15,16 @@ const signup = asyncHandler( async(req,res) => {
     const hashPassword = await bcrypt.hash(password,10);
 
     if(!username || !email ||!password)
-        throw new ApiError(400,"please fill all the required fields");
+        //throw new ApiError(400,"please fill all the required fields");
+      return res.status(401).json(new ApiResponse(401,null,"please fill all the required fields"));
 
     const existedUser = await User.findOne({
         $or: [{username},{email}]
     });
 
     if(existedUser)
-        throw new ApiError(404,"user already exist");
+        //throw new ApiError(404,"user already exist");
+      return res.status(401).json(new ApiResponse(401,null,"user already exist"));
 
     const user = await User.create({
         username:username.toLowerCase(),
@@ -33,8 +35,8 @@ const signup = asyncHandler( async(req,res) => {
     const createdUser = await User.findById(user._id).select("-password");
 
     if(!createdUser)
-        throw new ApiError(500,"user not registered, something went wrong while registering user");
-
+       // throw new ApiError(500,"user not registered, something went wrong while registering user");
+          return res.status(500).json(new ApiResponse(500,null,"user not registered, something went wrong while registering user"));
     return res.status(200).json(
         new ApiResponse(200,createdUser,"user registered successfully")
     )
@@ -46,17 +48,20 @@ const signin = asyncHandler(async(req,res)=> {
     const {email,password} = req.body;
 
     if(!email || !password)
-        throw new ApiError(400,"please fill all the required fields");
+        //throw new ApiError(400,"please fill all the required fields");
+      return res.status(401).json(new ApiResponse(401,null,"please fill all the required fields"));
 
     const user = await User.findOne({email});
 
     if(!user)
-        throw new ApiError(404,"user does not exist");
+       // throw new ApiError(404,"user does not exist");
+      return res.status(401).json(new ApiResponse(401,null,"user does not exist"));
 
     const isPasswordValid = bcrypt.compareSync(password,user.password);
 
     if(!isPasswordValid)
-        throw new ApiError(401,"password is incorrect");
+        //throw new ApiError(401,"password is incorrect");
+      return res.status(401).json(new ApiResponse(401,null,"password is incorrect"));
 
     const token = jwt.sign({id:user._id},process.env.JWT_SECRET);
 

@@ -156,12 +156,12 @@ const CreateListing = () => {
             setLoading(false);
 
             if(data.success === false){
-                setError(data.message);
+                setError(data.error);
             }
 
             navigate(`/listing/${data.data._id}`);
         } catch (error) {
-            setError(error.message);
+            setError(error.error);
             setLoading(false);
         }
     }

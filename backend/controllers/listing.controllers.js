@@ -136,5 +136,3 @@ const getListings = asyncHandler(async(req,res) => {
 })
 
 export { createListing,deleteListing,updateListing,getListing,getListings };
-
-

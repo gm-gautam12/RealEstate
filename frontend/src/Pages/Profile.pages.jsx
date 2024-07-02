@@ -93,7 +93,7 @@ const Profile = () => {
 
             const data = await res.json();
             if(data.success === false){
-                dispatch(updateUserFailure(data.message));
+                dispatch(updateUserFailure(data.error));
                 return;
             }
 
@@ -105,7 +105,7 @@ const Profile = () => {
         
 
         } catch (error) {
-            dispatch(updateUserFailure(error.message));
+            dispatch(updateUserFailure(error.error));
         }
         
     }
@@ -121,7 +121,7 @@ const Profile = () => {
 
             const data = await res.json();
             if(data.success === false){
-                dispatch(deleteUserFailure(data.message));
+                dispatch(deleteUserFailure(data.error));
                 return;
             }
 
@@ -129,7 +129,7 @@ const Profile = () => {
             
         } catch (error) {
             console.log(error,"====error====")
-            dispatch(deleteUserFailure(error));
+            dispatch(deleteUserFailure(error.error));
         }
     }
 
@@ -139,14 +139,14 @@ const Profile = () => {
             const res = await fetch("/api/auth/signout");
             const data = await res.json();
             if(data.success === false){
-                dispatch(signOutUserFailure(data.message));
+                dispatch(signOutUserFailure(data.error));
                 return;
             }
 
             dispatch(signOutUserSuccess(data.data));
 
         } catch (error) {
-            dispatch(signOutUserFailure(error));
+            dispatch(signOutUserFailure(error.error));
         }
     }
 
