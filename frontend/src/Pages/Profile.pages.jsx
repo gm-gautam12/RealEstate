@@ -27,8 +27,6 @@ const Profile = () => {
 
     const dispatch = useDispatch();
 
-    //console.log(formData);
-
     const fileRef = useRef(null);
 
     useEffect(() => {
@@ -81,7 +79,7 @@ const Profile = () => {
         try {
 
             dispatch(updateUserStart());
-            const res = await fetch(`/api/user/update/${currentUser._id}`,
+            const res = await fetch(`/api/user/update/${currentUser.data.user._id}`,
                 {
                     method:"POST",
                     headers: {
@@ -99,7 +97,6 @@ const Profile = () => {
 
             dispatch(updateUserSuccess(data.data));
              setUpdateSuccess(true);
-            console.log(data,"====== formData ======");
             setFormData(data.data);
 
         
@@ -113,7 +110,7 @@ const Profile = () => {
     const handleDeleteUser = async() => {
         try {
             dispatch(deleteUserStart());
-            const res = await fetch(`/api/user/delete/${currentUser._id}`,
+            const res = await fetch(`/api/user/delete/${currentUser.data.user._id}`,
                 {
                     method:"DELETE",
                 }
@@ -154,12 +151,12 @@ const Profile = () => {
 
         try {
             setShowImageListingError(false);
-           const res = await fetch(`/api/user/listings/${currentUser._id}`);
+           const res = await fetch(`/api/user/listings/${currentUser.data.user._id}`);
            const data = await res.json(); 
 
            console.log(data,"====data====");
 
-           if(data.success === false){
+           if(data.user.success === false){
                setShowImageListingError(true);
                return;
            }
@@ -194,7 +191,7 @@ const Profile = () => {
             <h1 className="text-3xl font-semibold text-center my-7">Profile</h1> 
             <form onSubmit={handleSumbit} className="flex flex-col gap-4">
                 <input onChange={(e) => setFile(e.target.files[0])} type="file" ref={fileRef} hidden accept="image/*"/>
-                <img onClick={() => fileRef.current.click()} className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2" src = {formData.avatar || currentUser.avatar} alt="profile"/>
+                <img onClick={() => fileRef.current.click()} className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2" src = {formData.avatar || currentUser?.data?.user?.avatar} alt="profile"/>
 
                 <p className="text-sm self-center">
                     {fileError ?
@@ -210,8 +207,8 @@ const Profile = () => {
                         )
                     }
                 </p>
-                <input type="text" placeholder="username" defaultValue={currentUser.username} id="username" className="border p-3 rounded-lg outline-none" onChange={handleChange}/>
-                <input type="email" placeholder="xyz@gmail.com" defaultValue={currentUser.email} id="email" className="border p-3 rounded-lg outline-none" onChange={handleChange}/>
+                <input type="text" placeholder="username" defaultValue={currentUser?.data?.user?.username} id="username" className="border p-3 rounded-lg outline-none" onChange={handleChange}/>
+                <input type="email" placeholder="xyz@gmail.com" defaultValue={currentUser?.data?.user?.email} id="email" className="border p-3 rounded-lg outline-none" onChange={handleChange}/>
                 <input type="password" placeholder="password" id="password" className="border p-3 rounded-lg outline-none" onChange={handleChange}/>
                 <button disabled={loading} className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80">{loading ? "loading..." : "Update"}</button>
                 <Link className="bg-green-700 p-3 rounded-lg text-center text-white uppercase hover:opacity-95" to={"/create-listing"}>Create Listing</Link>
